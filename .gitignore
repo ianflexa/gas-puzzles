@@ -10,6 +10,6 @@ typechain-types
 cache
 artifacts
 
-#Problem Solutions
-contracts_optimized
-contracts/contracts_optimized/*
+# #Problem Solutions
+# contracts_optimized
+# contracts/contracts_optimized/*
