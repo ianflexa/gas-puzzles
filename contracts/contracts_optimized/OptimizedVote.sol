@@ -2,7 +2,8 @@
 
 pragma solidity 0.8.15;
 
-contract Vote {
+contract OptimizedVote {
+    uint8 private proposalNum;
     struct Voter {
         uint8 vote;
         bool voted;
@@ -15,19 +16,18 @@ contract Vote {
     }
 
     mapping(address => Voter) public voters;
-
-    Proposal[] proposals;
+    mapping (uint8 => Proposal) public proposals;
 
     function createProposal(bytes32 _name) external {
-        proposals.push(Proposal({voteCount: 0, name: _name, ended: false}));
+        proposals[proposalNum].name = _name;
+        ++proposalNum;
     }
 
     function vote(uint8 _proposal) external {
-        require(!voters[msg.sender].voted, 'already voted');
-        voters[msg.sender].vote = _proposal;
-        voters[msg.sender].voted = true;
-
-        proposals[_proposal].voteCount += 1;
+        address voter = msg.sender;
+        require(!voters[voter].voted, 'already voted');
+        voters[voter] = Voter({vote: _proposal, voted: true});
+        ++proposals[_proposal].voteCount;
     }
 
     function getVoteCount(uint8 _proposal) external view returns (uint8) {
